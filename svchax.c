@@ -109,7 +109,7 @@ typedef struct
 typedef struct
 {
    u32 old_cpu_time_limit;
-   u8 isNew3DS;
+   bool isNew3DS;
    u32 kernel_fcram_mapping_offset;
 
    Handle arbiter;
@@ -213,11 +213,9 @@ static void do_memchunkhax2(void)
    for (i = 0; i < MCH2_THREAD_COUNT_MAX; i++)
       mch2.threads[i].stack_top = (u32*)((u32)thread_stacks + (i + 1) * (MCH2_THREAD_STACKS_SIZE / MCH2_THREAD_COUNT_MAX));
 
-   aptOpenSession();
    APT_CheckNew3DS(&mch2.isNew3DS);
    APT_GetAppCpuTimeLimit(&mch2.old_cpu_time_limit);
    APT_SetAppCpuTimeLimit(5);
-   aptCloseSession();
 
    for (i = 0; i < mch2.threads_limit; i++)
    {
@@ -374,9 +372,7 @@ static void do_memchunkhax2(void)
 
    svcControlMemory(&tmp, linear_buffer, 0, 0x1000, MEMOP_FREE, MEMPERM_DONTCARE);
 
-   aptOpenSession();
    APT_SetAppCpuTimeLimit(mch2.old_cpu_time_limit);
-   aptCloseSession();
 }
 
 
@@ -468,10 +464,8 @@ static void do_memchunkhax1(void)
 
 Result svchax_init(bool patch_srv)
 {
-   u8 isNew3DS;
-   aptOpenSession();
+   bool isNew3DS;
    APT_CheckNew3DS(&isNew3DS);
-   aptCloseSession();
 
    u32 kver = osGetKernelVersion();
 
