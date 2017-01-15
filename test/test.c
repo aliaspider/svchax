@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
-#include "svchax.h"
+#include "../svchax.h"
 
 static const char* test_result;
 
